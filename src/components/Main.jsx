@@ -2,11 +2,11 @@ import { useState } from "react";
 import ListBox from "./ListBox.jsx";
 import WatchedBox from './WatchedBox.jsx';
 
-const Main = () => {
+const Main = ({movies}) => {
 
   return (
     <main className="main">
-      <ListBox />
+      <ListBox movies={movies}/>
       
       <WatchedBox />
     </main>
