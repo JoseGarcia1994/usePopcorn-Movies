@@ -5,7 +5,7 @@ import WatchedList from "./WatchedList.jsx";
 
 const WatchedBox = () => {
 
-  const [watched, setWatched] = useState(tempWatchedData);
+  
   const [isOpen2, setIsOpen2] = useState(true);
 
   return (
@@ -18,9 +18,7 @@ const WatchedBox = () => {
       </button>
       {isOpen2 && (
         <>
-          <WatchedSummary watched={watched}/>
-
-          <WatchedList watched={watched}/>
+          
         </>
       )}
     </div>
