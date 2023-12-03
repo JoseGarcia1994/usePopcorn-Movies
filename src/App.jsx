@@ -83,7 +83,7 @@ const App = () => {
 
         <Box>
           { selectedId ? (
-            <SelectedMovie 
+            <SelectedMovie
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie} 
             /> 
