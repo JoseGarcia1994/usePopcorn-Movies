@@ -20,12 +20,14 @@ const App = () => {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setIsLoading(true)
-        const res = await fetch(`http://www.omdbapi.com/?apikey=${key}&s=interstellar`);
+        setError('');
+        const res = await fetch(`http://www.omdbapi.com/?apikey=${key}&s=${query}`);
         
         if (!res.ok) throw new Error("Something went wrong with fetching movies") 
       
@@ -40,13 +42,20 @@ const App = () => {
         setIsLoading(false)
       }
     }
+
+    // If query has less than 3 letters dont run fetchMovies();
+    if (query.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
     fetchMovies();
-  }, [])
+  }, [query])
 
   return (
     <>
       <Navbar>
-        <Search />      
+        <Search query={query} setQuery={setQuery} />      
         <NumResults movies={movies}/>
       </Navbar>
 
