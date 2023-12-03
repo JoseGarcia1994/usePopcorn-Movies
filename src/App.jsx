@@ -7,6 +7,7 @@ import NumResults from './components/NumResults.jsx';
 import Main from './components/Main.jsx';
 import Box from './components/Box.jsx';
 import MovieList from './components/MovieList.jsx';
+import SelectedMovie from './components/SelectedMovie.jsx';
 import WatchedSummary from './components/WatchedSummary.jsx';
 import WatchedList from './components/WatchedList.jsx';
 import Loader from './components/Loader.jsx';
@@ -21,6 +22,15 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleSelectedMovie = (id) => {
+    setSelectedId(selectedId => id === selectedId ? null : id)
+  }
+
+  const handleCloseMovie = () => {
+    setSelectedId(null)
+  }
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -63,13 +73,26 @@ const App = () => {
         <Box>
           {/* isLoading ? <Loader /> : <MovieList movies={movies}/> */}
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && 
+          <MovieList 
+            movies={movies}
+            handleSelectedMovie={handleSelectedMovie}
+          /> }
           {error && <ErrorMessage message={error}/>}
         </Box>
 
         <Box>
-          <WatchedSummary watched={watched}/>
-          <WatchedList watched={watched}/>
+          { selectedId ? (
+            <SelectedMovie 
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie} 
+            /> 
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
