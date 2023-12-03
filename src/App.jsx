@@ -9,6 +9,7 @@ import Box from './components/Box.jsx';
 import MovieList from './components/MovieList.jsx';
 import WatchedSummary from './components/WatchedSummary.jsx';
 import WatchedList from './components/WatchedList.jsx';
+import Loader from './components/Loader.jsx';
 
 const key = 'af38a845'
 
@@ -16,12 +17,15 @@ const App = () => {
   
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchMovies = async () => {
+      setIsLoading(true)
       const res = await fetch(`http://www.omdbapi.com/?apikey=${key}&s=interstellar`)
       const data = await res.json();
       setMovies(data.Search)
+      setIsLoading(false)
     }
     fetchMovies();
   }, [])
@@ -36,7 +40,7 @@ const App = () => {
 
       <Main>
         <Box>
-          <MovieList movies={movies}/>
+          {isLoading ? <Loader /> : <MovieList movies={movies}/>}
         </Box>
 
         <Box>
