@@ -70,12 +70,14 @@ const App = () => {
       setMovies([]);
       setError("");
       return;
-    }
+    };
+
+    handleCloseMovie();
     fetchMovies();
 
     return () => controller.abort();
   }, [query])
-
+  
   return (
     <>
       <Navbar>
