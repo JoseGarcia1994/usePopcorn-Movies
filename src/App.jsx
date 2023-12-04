@@ -1,6 +1,5 @@
 import './App.css'
 import { useState, useEffect } from "react";
-import { tempMovieData, tempWatchedData } from './data';
 import Navbar from './components/Navbar.jsx';
 import Search from './components/Search.jsx';
 import NumResults from './components/NumResults.jsx';
@@ -18,7 +17,7 @@ const key = 'af38a845'
 const App = () => {
   
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -30,6 +29,14 @@ const App = () => {
 
   const handleCloseMovie = () => {
     setSelectedId(null)
+  }
+
+  const handleAddWatched = movie => {
+    setWatched(watched => [...watched, movie])
+  }
+
+  const handleDeleteWatched = id => {
+    setWatched(watched => watched.filter(movie => movie.imdbID !== id))
   }
 
   useEffect(() => {
@@ -85,12 +92,14 @@ const App = () => {
           { selectedId ? (
             <SelectedMovie
               selectedId={selectedId}
-              onCloseMovie={handleCloseMovie} 
+              onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatched}
+              watched={watched}
             /> 
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedList watched={watched} />
+              <WatchedList watched={watched} onDeleteWatched={handleDeleteWatched} />
             </>
           )}
         </Box>
