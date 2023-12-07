@@ -94,6 +94,9 @@ body {
   color: #fff;
 }
 
+.logo img {
+  width: 25px;
+}
 
 .search {
   justify-self: center;
