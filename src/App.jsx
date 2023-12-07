@@ -17,7 +17,10 @@ const key = 'af38a845'
 const App = () => {
   
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(() => {
+    const storedValue = localStorage.getItem('watched');
+    return JSON.parse(storedValue);
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -33,11 +36,18 @@ const App = () => {
 
   const handleAddWatched = movie => {
     setWatched(watched => [...watched, movie])
+    // This can be done in a use Effect to be reusable
+    // localStorage.setItem('watched', JSON.stringify([...watched, movie]));
   }
 
   const handleDeleteWatched = id => {
     setWatched(watched => watched.filter(movie => movie.imdbID !== id))
   }
+
+  useEffect(() => {
+    localStorage.setItem('watched', JSON.stringify(watched));
+  }, [watched])
+  
 
   useEffect(() => {
     const controller = new AbortController();
