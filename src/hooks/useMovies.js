@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 
 const key = 'af38a845'
@@ -10,12 +11,13 @@ export function useMovies(query) {
   useEffect(() => {
     const controller = new AbortController();
 
-    const fetchMovies = async () => {
+    /* const fetchMovies = async () => {
       try {
         setIsLoading(true)
         setError('');
         const res = await fetch(`http://www.omdbapi.com/?apikey=${key}&s=${query}`, { signal: controller.signal });
 
+        console.log(res);
         if (!res.ok) throw new Error("Something went wrong with fetching movies")
 
         const data = await res.json();
@@ -31,6 +33,26 @@ export function useMovies(query) {
       } finally {
         setIsLoading(false)
       }
+    } */
+
+    const fetchMovies = () => {
+      
+      setIsLoading(true)
+      setError('');
+      axios
+          .get(`http://www.omdbapi.com/?apikey=${key}&s=${query}`, { signal: controller.signal })
+          .then( (res) => {
+            if (res.status != 200) throw new Error("Something went wrong with fetching movies")
+            if (res.data.Response === 'False') throw new Error("Movie not found");
+            setMovies(res.data.Search)
+            setError("")
+          })
+          .catch( err => {
+            if (err.name !== "AbortName") {
+              setError(err.message);
+            }
+          })
+          .finally(() => setIsLoading(false));
     }
 
     // If query has less than 3 letters dont run fetchMovies();
